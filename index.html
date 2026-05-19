@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tennessee Retiree Group Insurance Eligibility Decision Tree</title>
+  <title>Retiree Insurance Eligibility Helper</title>
   <style>
     :root {
-      --bg: #f5f7fb;
+      --bg: #f4f7fb;
       --card: #ffffff;
       --text: #1f2937;
-      --muted: #5f6b7a;
-      --border: #d9e0ea;
+      --muted: #526173;
+      --border: #d6dee9;
       --primary: #1f5ea8;
       --primary-dark: #174a85;
       --success-bg: #e8f5ee;
       --success: #116b3b;
       --warning-bg: #fff7e6;
-      --warning: #8a5a00;
+      --warning: #805200;
       --error-bg: #fdecec;
       --error: #9f1d1d;
       --info-bg: #eef5ff;
@@ -28,9 +28,10 @@
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
-      line-height: 1.5;
+      line-height: 1.6;
       color: var(--text);
       background: var(--bg);
+      font-size: 18px;
     }
 
     header {
@@ -40,124 +41,147 @@
     }
 
     .wrap {
-      width: min(1120px, calc(100% - 2rem));
+      width: min(980px, calc(100% - 2rem));
       margin: 0 auto;
     }
 
     .eyebrow {
       margin: 0 0 .35rem;
-      font-size: .875rem;
-      letter-spacing: .05em;
+      font-size: .95rem;
+      letter-spacing: .04em;
       text-transform: uppercase;
-      opacity: .9;
+      opacity: .95;
       font-weight: 700;
     }
 
     h1 {
       margin: 0 0 .75rem;
-      font-size: clamp(1.6rem, 3vw, 2.5rem);
+      font-size: clamp(1.75rem, 4vw, 2.6rem);
       line-height: 1.15;
     }
 
+    h2, h3 { line-height: 1.25; }
+
     header p {
-      max-width: 850px;
+      max-width: 830px;
       margin: 0;
-      font-size: 1rem;
-      opacity: .95;
+      font-size: 1.05rem;
+      opacity: .98;
     }
 
-    main {
-      padding: 1.5rem 0 3rem;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 1rem;
-      align-items: start;
-    }
-
-    @media (max-width: 860px) {
-      .grid { grid-template-columns: 1fr; }
-    }
+    main { padding: 1.5rem 0 3rem; }
 
     .card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 18px;
       box-shadow: 0 8px 24px rgba(15, 23, 42, .07);
       overflow: hidden;
+      margin-bottom: 1rem;
     }
 
     .card-header {
-      padding: 1rem 1.25rem;
+      padding: 1.1rem 1.25rem;
       border-bottom: 1px solid var(--border);
       background: #fbfcff;
     }
 
-    .card-header h2, .card-header h3 {
+    .card-header h2 {
       margin: 0;
-      font-size: 1.15rem;
+      font-size: 1.35rem;
     }
 
-    .card-body {
-      padding: 1.25rem;
+    .card-body { padding: 1.25rem; }
+
+    .intro-list {
+      margin: .75rem 0 0;
+      padding-left: 1.3rem;
+    }
+
+    .intro-list li + li { margin-top: .35rem; }
+
+    .step {
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: #ffffff;
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 700;
+      margin-right: .4rem;
     }
 
     fieldset {
       border: 0;
       padding: 0;
-      margin: 0 0 1.2rem;
+      margin: 0;
     }
 
     legend, label.question-label {
       display: block;
       font-weight: 700;
-      margin-bottom: .45rem;
+      margin-bottom: .65rem;
+      font-size: 1.12rem;
     }
 
     .hint {
       color: var(--muted);
-      font-size: .92rem;
-      margin: -.25rem 0 .55rem;
+      font-size: 1rem;
+      margin: -.25rem 0 .75rem;
     }
 
     select, input[type="number"] {
       width: 100%;
-      min-height: 44px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: .6rem .75rem;
+      min-height: 54px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: .7rem .85rem;
       font: inherit;
       background: #ffffff;
       color: var(--text);
     }
 
-    select:focus, input:focus, button:focus {
-      outline: 3px solid var(--focus);
+    select:focus, input:focus, button:focus, summary:focus {
+      outline: 4px solid var(--focus);
       outline-offset: 2px;
     }
 
-    .radio-group {
+    .choice-grid {
       display: grid;
-      gap: .5rem;
+      gap: .7rem;
     }
 
-    .radio-option {
+    .choice-option {
       display: flex;
       align-items: flex-start;
-      gap: .6rem;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: .65rem .75rem;
+      gap: .75rem;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: .85rem;
       background: #fff;
       cursor: pointer;
+      min-height: 58px;
     }
 
-    .radio-option input {
-      margin-top: .25rem;
-      transform: scale(1.1);
+    .choice-option:hover { border-color: var(--primary); }
+
+    .choice-option input {
+      margin-top: .35rem;
+      transform: scale(1.35);
     }
+
+    .choice-option strong { display: block; }
+    .choice-option span { color: var(--muted); font-size: .95rem; }
 
     .two-col {
       display: grid;
@@ -165,43 +189,40 @@
       gap: .9rem;
     }
 
-    @media (max-width: 620px) {
+    @media (max-width: 700px) {
+      body { font-size: 17px; }
       .two-col { grid-template-columns: 1fr; }
+      .wrap { width: min(100% - 1rem, 980px); }
+      header { padding: 1.5rem .5rem; }
+      .card-body, .card-header { padding: 1rem; }
     }
 
     .actions {
       display: flex;
       flex-wrap: wrap;
-      gap: .6rem;
+      gap: .75rem;
       margin-top: 1rem;
     }
 
     button {
       border: 0;
       border-radius: 999px;
-      padding: .75rem 1rem;
+      padding: .9rem 1.15rem;
       font: inherit;
       font-weight: 700;
       cursor: pointer;
+      min-height: 54px;
     }
 
-    .primary {
-      background: var(--primary);
-      color: #fff;
-    }
-
+    .primary { background: var(--primary); color: #fff; }
     .primary:hover { background: var(--primary-dark); }
-
-    .secondary {
-      background: #e8edf5;
-      color: #1f2937;
-    }
+    .secondary { background: #e8edf5; color: #1f2937; }
 
     .result-box {
-      border-radius: 14px;
-      padding: 1rem;
+      border-radius: 16px;
+      padding: 1.1rem;
       margin-bottom: 1rem;
-      border: 1px solid transparent;
+      border: 2px solid transparent;
     }
 
     .eligible { background: var(--success-bg); color: var(--success); border-color: #bfe5ce; }
@@ -209,277 +230,278 @@
     .not-eligible { background: var(--error-bg); color: var(--error); border-color: #efb8b8; }
     .neutral { background: var(--info-bg); color: #174a85; border-color: #c8dcf7; }
 
-    .result-box h3 {
+    .result-box h2, .result-box h3 {
       margin: 0 0 .35rem;
-      font-size: 1.2rem;
+      font-size: 1.35rem;
     }
 
-    .result-box p { margin: .35rem 0 0; }
-
-    ul, ol { padding-left: 1.25rem; }
-    li + li { margin-top: .35rem; }
-
-    .pill-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .45rem;
-      padding: 0;
-      margin: .6rem 0 0;
-      list-style: none;
+    .plain-list {
+      padding-left: 1.25rem;
+      margin-top: .5rem;
     }
 
-    .pill-list li {
-      margin: 0;
-      padding: .35rem .6rem;
-      border-radius: 999px;
-      background: #eef2f7;
-      font-size: .88rem;
-    }
+    .plain-list li + li { margin-top: .4rem; }
 
     details {
       border-top: 1px solid var(--border);
-      padding: .85rem 1.25rem;
+      padding: 1rem 1.25rem;
       background: #fff;
     }
 
     details summary {
       cursor: pointer;
       font-weight: 700;
+      font-size: 1.05rem;
     }
 
-    .small {
-      font-size: .9rem;
-      color: var(--muted);
-    }
-
+    .small { font-size: .98rem; color: var(--muted); }
     .hidden { display: none !important; }
 
-    .checklist {
-      display: grid;
-      gap: .65rem;
+    .notice {
+      padding: .9rem 1rem;
+      border-radius: 14px;
+      background: #fff7e6;
+      border: 2px solid #f1d48a;
+      margin-top: .75rem;
     }
 
-    .check-item {
-      padding: .7rem .75rem;
+    .status-list {
+      display: grid;
+      gap: .65rem;
+      margin-top: .75rem;
+    }
+
+    .status-item {
+      padding: .8rem;
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       background: #fff;
     }
 
-    .check-item strong { display: block; }
+    .status-item strong { display: block; }
 
-    .status-dot {
+    .dot {
       display: inline-block;
-      width: .7rem;
-      height: .7rem;
+      width: .75rem;
+      height: .75rem;
       border-radius: 50%;
-      margin-right: .35rem;
+      margin-right: .4rem;
       vertical-align: middle;
       background: var(--muted);
     }
 
-    .dot-pass { background: var(--success); }
-    .dot-fail { background: var(--error); }
-    .dot-review { background: var(--warning); }
+    .pass { background: var(--success); }
+    .fail { background: var(--error); }
+    .maybe { background: var(--warning); }
   </style>
 </head>
 <body>
   <header>
     <div class="wrap">
-      <p class="eyebrow">Interactive decision tree</p>
-      <h1>Tennessee Retiree Group Insurance Eligibility</h1>
-      <p>Use this tool to walk through retiree group health eligibility for State, Higher Education, Local Education and Local Government employees. This is a screening tool only; formal plan documents and Benefits Administration review control final eligibility.</p>
+      <p class="eyebrow">Simple screening tool</p>
+      <h1>Can I keep health insurance when I retire?</h1>
+      <p>Answer a few questions. This tool gives a simple answer: likely yes, likely no or needs review.</p>
     </div>
   </header>
 
   <main class="wrap">
-    <div class="grid">
-      <section class="card" aria-labelledby="tree-title">
-        <div class="card-header">
-          <h2 id="tree-title">Eligibility questions</h2>
-        </div>
-        <div class="card-body">
-          <form id="eligibilityForm">
-            <fieldset>
-              <legend>1. What type of agency did the employee retire from?</legend>
-              <div class="radio-group">
-                <label class="radio-option"><input type="radio" name="agency" value="state" required /> State</label>
-                <label class="radio-option"><input type="radio" name="agency" value="hed" /> Higher Education</label>
-                <label class="radio-option"><input type="radio" name="agency" value="le" /> Local Education</label>
-                <label class="radio-option"><input type="radio" name="agency" value="lg" /> Local Government</label>
-              </div>
-            </fieldset>
-
-            <fieldset id="agencyParticipationBlock" class="hidden">
-              <legend>2. Agency participation</legend>
-              <div id="leParticipation" class="hidden">
-                <label class="question-label" for="leParticipating">Did the Local Education agency participate in the State Group Insurance Program?</label>
-                <select id="leParticipating" name="leParticipating">
-                  <option value="">Select one</option>
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-                  <option value="unknown">Not sure</option>
-                </select>
-              </div>
-              <div id="lgOptIn" class="hidden">
-                <label class="question-label" for="lgOptedIn">Has the Local Government agency opted in, in writing, to offer retiree group health coverage?</label>
-                <select id="lgOptedIn" name="lgOptedIn">
-                  <option value="">Select one</option>
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-                  <option value="unknown">Not sure</option>
-                </select>
-                <p class="hint">Local Government service generally cannot be combined with State, Higher Education, Local Education or another Local Government agency.</p>
-              </div>
-            </fieldset>
-
-            <fieldset>
-              <legend>3. Retirement system</legend>
-              <div class="radio-group">
-                <label class="radio-option"><input type="radio" name="retirementSystem" value="tcrs" required /> TCRS</label>
-                <label class="radio-option"><input type="radio" name="retirementSystem" value="orp" /> ORP / Non-TCRS</label>
-              </div>
-            </fieldset>
-
-            <fieldset>
-              <legend>4. Hire date</legend>
-              <label class="question-label" for="hireBefore2015">Was the first qualifying hire date before July 1, 2015?</label>
-              <select id="hireBefore2015" name="hireBefore2015" required>
-                <option value="">Select one</option>
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-                <option value="unknown">Not sure</option>
-              </select>
-              <p class="hint">If service was cashed out and later bought back, the cashed-out hire date may not count for this requirement.</p>
-            </fieldset>
-
-            <div class="two-col">
-              <fieldset>
-                <legend>5. Creditable service</legend>
-                <label class="question-label" for="serviceYears">Years of creditable service</label>
-                <input id="serviceYears" name="serviceYears" type="number" min="0" max="60" step="0.1" required />
-              </fieldset>
-
-              <fieldset>
-                <legend>6. Continuous coverage</legend>
-                <label class="question-label" for="coverageYears">Years enrolled immediately before termination</label>
-                <input id="coverageYears" name="coverageYears" type="number" min="0" max="60" step="0.1" required />
-              </fieldset>
-            </div>
-
-            <div class="two-col">
-              <fieldset>
-                <legend>7. Age at termination</legend>
-                <label class="question-label" for="ageAtTermination">Age when active employment terminated</label>
-                <input id="ageAtTermination" name="ageAtTermination" type="number" min="0" max="100" step="1" required />
-              </fieldset>
-
-              <fieldset>
-                <legend>8. Gap timing</legend>
-                <label class="question-label" for="gapYears">Years between employment termination and retirement/insurance start</label>
-                <input id="gapYears" name="gapYears" type="number" min="0" max="20" step="0.1" value="0" required />
-              </fieldset>
-            </div>
-
-            <fieldset id="tcrsQuestions">
-              <legend>9. TCRS-specific questions</legend>
-              <label class="question-label" for="pensionCheck">Is the retiree receiving a TCRS pension check based on their own service?</label>
-              <select id="pensionCheck" name="pensionCheck">
-                <option value="">Select one</option>
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-                <option value="unknown">Not sure</option>
-              </select>
-
-              <label class="question-label" for="dorTiming" style="margin-top: .9rem;">Did the TCRS date of retirement meet the timing rule?</label>
-              <select id="dorTiming" name="dorTiming">
-                <option value="">Select one</option>
-                <option value="yes">Yes — on or before active coverage terminated, or within an allowed gap</option>
-                <option value="no">No</option>
-                <option value="unknown">Not sure</option>
-              </select>
-            </fieldset>
-
-            <fieldset id="nonTcrsQuestions" class="hidden">
-              <legend>9. ORP / Non-TCRS-specific questions</legend>
-              <label class="question-label" for="immediateCoverage">Did retiree insurance immediately follow active coverage, unless an allowed gap applies?</label>
-              <select id="immediateCoverage" name="immediateCoverage">
-                <option value="">Select one</option>
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-                <option value="unknown">Not sure</option>
-              </select>
-            </fieldset>
-
-            <fieldset>
-              <legend>10. Application timing</legend>
-              <label class="question-label" for="applicationTimely">Was the Application to Continue Insurance at Retirement submitted within the required timeframe?</label>
-              <select id="applicationTimely" name="applicationTimely" required>
-                <option value="">Select one</option>
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-                <option value="unknown">Not sure</option>
-              </select>
-              <p class="hint">Generally within one full calendar month after active coverage ends or after meeting the retirement eligibility conditions/TCRS notice timing.</p>
-            </fieldset>
-
-            <div class="actions">
-              <button type="submit" class="primary">Check eligibility</button>
-              <button type="button" class="secondary" id="resetBtn">Reset</button>
-              <button type="button" class="secondary" id="printBtn">Print results</button>
-            </div>
-          </form>
-        </div>
-      </section>
-
-      <aside class="card" aria-labelledby="result-title">
-        <div class="card-header">
-          <h2 id="result-title">Result</h2>
-        </div>
-        <div class="card-body" id="resultArea">
-          <div class="result-box neutral">
-            <h3>Complete the questions to see a result.</h3>
-            <p>The decision tree will show whether the person appears eligible, not eligible, or needs Benefits Administration review.</p>
-          </div>
-          <div class="checklist" id="checklistArea"></div>
-        </div>
-      </aside>
-    </div>
-
-    <section class="card" style="margin-top: 1rem;" aria-labelledby="reference-title">
+    <section class="card">
       <div class="card-header">
-        <h2 id="reference-title">Reference notes built into this tool</h2>
+        <h2>Before you begin</h2>
       </div>
+      <div class="card-body">
+        <p>This tool is for people retiring from the State of Tennessee Group Insurance Program. It does not make the final decision.</p>
+        <ul class="intro-list">
+          <li>You may need help from your agency benefits coordinator.</li>
+          <li>You should have your retirement date, years of service and insurance coverage history nearby.</li>
+          <li>Rules can be different for State, Higher Education, Local Education and Local Government employees.</li>
+        </ul>
+        <div class="notice"><strong>Plain-language tip:</strong> “Continuous coverage” means you were enrolled in insurance right before your job ended.</div>
+      </div>
+    </section>
 
-      <details>
-        <summary>State, Higher Education and Local Education service rule</summary>
-        <p>For State, Higher Education and participating Local Education retirees, creditable service may include State, Higher Education and participating Local Education service. Unused sick leave may also count where applicable.</p>
+    <section class="card" aria-labelledby="form-title">
+      <div class="card-header">
+        <h2 id="form-title">Answer these questions</h2>
+      </div>
+      <div class="card-body">
+        <form id="eligibilityForm">
+          <div class="step">
+            <fieldset>
+              <legend><span class="step-number">1</span>Who did you work for?</legend>
+              <div class="choice-grid">
+                <label class="choice-option"><input type="radio" name="agency" value="state" required /> <span><strong>State</strong> State agency employee</span></label>
+                <label class="choice-option"><input type="radio" name="agency" value="hed" /> <span><strong>Higher Education</strong> College, university or higher education employee</span></label>
+                <label class="choice-option"><input type="radio" name="agency" value="le" /> <span><strong>Local Education</strong> School system employee</span></label>
+                <label class="choice-option"><input type="radio" name="agency" value="lg" /> <span><strong>Local Government</strong> City, county or other local government employee</span></label>
+              </div>
+            </fieldset>
+          </div>
+
+          <div class="step hidden" id="agencyRuleBlock">
+            <div id="leRule" class="hidden">
+              <label class="question-label" for="leParticipating"><span class="step-number">2</span>Was your school system in the State Group Insurance Program?</label>
+              <p class="hint">Choose “Not sure” if you do not know.</p>
+              <select id="leParticipating" name="leParticipating">
+                <option value="">Select one</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+                <option value="unknown">Not sure</option>
+              </select>
+            </div>
+            <div id="lgRule" class="hidden">
+              <label class="question-label" for="lgOptedIn"><span class="step-number">2</span>Does your local government offer retiree health coverage?</label>
+              <p class="hint">Local governments must choose to offer this coverage. Choose “Not sure” if you do not know.</p>
+              <select id="lgOptedIn" name="lgOptedIn">
+                <option value="">Select one</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+                <option value="unknown">Not sure</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="step">
+            <fieldset>
+              <legend><span class="step-number">3</span>Which retirement plan applies?</legend>
+              <div class="choice-grid">
+                <label class="choice-option"><input type="radio" name="retirementSystem" value="tcrs" required /> <span><strong>TCRS</strong> I receive or will receive a TCRS pension check.</span></label>
+                <label class="choice-option"><input type="radio" name="retirementSystem" value="nonTcrs" /> <span><strong>ORP / Non-TCRS</strong> I am not retiring through TCRS.</span></label>
+                <label class="choice-option"><input type="radio" name="retirementSystem" value="unknown" /> <span><strong>Not sure</strong> I need help confirming this.</span></label>
+              </div>
+            </fieldset>
+          </div>
+
+          <div class="step">
+            <label class="question-label" for="hireBefore2015"><span class="step-number">4</span>Were you first hired before July 1, 2015?</label>
+            <select id="hireBefore2015" name="hireBefore2015" required>
+              <option value="">Select one</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+              <option value="unknown">Not sure</option>
+            </select>
+          </div>
+
+          <div class="step">
+            <fieldset>
+              <legend><span class="step-number">5</span>How many years of service do you have?</legend>
+              <p class="hint">Round down if you are not sure. For example, use 14 if you have 14 years and 8 months.</p>
+              <select id="serviceGroup" name="serviceGroup" required>
+                <option value="">Select one</option>
+                <option value="less10">Less than 10 years</option>
+                <option value="10to19">10 to 19 years</option>
+                <option value="20to24">20 to 24 years</option>
+                <option value="25to29">25 to 29 years</option>
+                <option value="30plus">30 years or more</option>
+                <option value="unknown">Not sure</option>
+              </select>
+            </fieldset>
+          </div>
+
+          <div class="step">
+            <label class="question-label" for="coverageYears"><span class="step-number">6</span>How long were you enrolled in insurance right before your job ended?</label>
+            <select id="coverageYears" name="coverageYears" required>
+              <option value="">Select one</option>
+              <option value="less1">Less than 1 year</option>
+              <option value="1to2">At least 1 year, but less than 3 years</option>
+              <option value="3plus">3 years or more</option>
+              <option value="unknown">Not sure</option>
+            </select>
+          </div>
+
+          <div class="step">
+            <label class="question-label" for="age55"><span class="step-number">7</span>Were you at least age 55 when your job ended?</label>
+            <select id="age55" name="age55" required>
+              <option value="">Select one</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+              <option value="unknown">Not sure</option>
+            </select>
+            <p class="hint">Some rules require age 55. Some do not. It depends on your employer type and years of service.</p>
+          </div>
+
+          <div class="step">
+            <label class="question-label" for="retirementTiming"><span class="step-number">8</span>Did your retirement or retiree insurance start on time?</label>
+            <p class="hint">For many people, coverage must start right away. Some people with more service may have up to a 5-year gap.</p>
+            <select id="retirementTiming" name="retirementTiming" required>
+              <option value="">Select one</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+              <option value="unknown">Not sure</option>
+            </select>
+          </div>
+
+          <div class="step">
+            <label class="question-label" for="applicationTimely"><span class="step-number">9</span>Was the retirement insurance application sent on time?</label>
+            <p class="hint">Usually, this means within one full calendar month after active coverage ended or after retirement conditions were met.</p>
+            <select id="applicationTimely" name="applicationTimely" required>
+              <option value="">Select one</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+              <option value="unknown">Not sure</option>
+            </select>
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="primary">Show my result</button>
+            <button type="button" class="secondary" id="resetBtn">Start over</button>
+            <button type="button" class="secondary" id="printBtn">Print</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="result-title">
+      <div class="card-header">
+        <h2 id="result-title">Your result</h2>
+      </div>
+      <div class="card-body" id="resultArea">
+        <div class="result-box neutral">
+          <h3>Answer the questions above.</h3>
+          <p>Your result will show here.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="help-title">
+      <div class="card-header">
+        <h2 id="help-title">Need help understanding the words?</h2>
+      </div>
+      <details open>
+        <summary>Common words in plain language</summary>
+        <ul class="plain-list">
+          <li><strong>Retiree insurance:</strong> Health insurance you may be able to keep after your job ends because you retired.</li>
+          <li><strong>Continuous coverage:</strong> You were enrolled in insurance right before your job ended.</li>
+          <li><strong>TCRS pension check:</strong> A monthly retirement payment from TCRS based on your own work.</li>
+          <li><strong>Creditable service:</strong> The years of work that count toward retiree insurance.</li>
+          <li><strong>Application timing:</strong> The deadline to turn in the retirement insurance form.</li>
+        </ul>
       </details>
-
       <details>
-        <summary>Local Government service rule</summary>
-        <p>For Local Government retirees, the agency must have opted in to offer retiree group health coverage. Local Government service cannot be combined with State, Higher Education, Local Education or another Local Government agency for group health eligibility.</p>
+        <summary>What papers may be needed?</summary>
+        <ul class="plain-list">
+          <li>Application to Continue Insurance at Retirement</li>
+          <li>Retirement date or TCRS notice</li>
+          <li>Proof of years of service</li>
+          <li>Proof of insurance coverage before your job ended</li>
+          <li>Proof that your agency offers the coverage, if you worked for Local Education or Local Government</li>
+        </ul>
       </details>
-
       <details>
-        <summary>Tennessee Plan reminder</summary>
-        <p>The Tennessee Plan is supplemental medical insurance for retirees with Medicare. Applicants generally must be enrolled in at least Medicare Part A and must have an initial qualifying hire date before July 1, 2015. The Tennessee Plan does not coordinate with Medicare Advantage and does not include prescription drug coverage.</p>
+        <summary>Adding a spouse or child?</summary>
+        <ul class="plain-list">
+          <li><strong>Spouse:</strong> marriage certificate. If married more than 12 months, proof of joint ownership may also be needed.</li>
+          <li><strong>Child:</strong> birth certificate, adoption papers or court order, depending on the relationship.</li>
+          <li><strong>Disabled dependent:</strong> special paperwork must be submitted before the child turns 26.</li>
+        </ul>
       </details>
-
       <details>
-        <summary>Dental and vision reminder</summary>
-        <p>Retiree dental and vision continuation is not automatic. Eligibility depends on retirement status, agency participation and plan-specific rules. Vision generally also requires enrollment in a State-sponsored health insurance program.</p>
-      </details>
-
-      <details>
-        <summary>Dependent documentation quick guide</summary>
-        <ul>
-          <li><strong>Spouse:</strong> marriage certificate/license or naturalization papers showing marital status. If married more than 12 months, also provide proof of joint ownership, such as a recent bank statement, mortgage statement, lease, credit card statement, property tax statement or federal tax return page.</li>
-          <li><strong>Natural child:</strong> birth certificate or equivalent birth record.</li>
-          <li><strong>Adopted child:</strong> final adoption order, international adoption papers or court order placing the child for adoption.</li>
-          <li><strong>Stepchild:</strong> marriage verification plus the child’s birth certificate showing relationship to the spouse.</li>
-          <li><strong>Guardianship/custody/conservatorship:</strong> valid court order and required attestation.</li>
-          <li><strong>Incapacitated dependent:</strong> Certificate of Incapacitation submitted before age 26, plus carrier review/approval.</li>
+        <summary>Important reminders</summary>
+        <ul class="plain-list">
+          <li>People hired on or after July 1, 2015 are generally not eligible to continue retiree group health coverage.</li>
+          <li>Local Government agencies must choose, in writing, to offer retiree health coverage.</li>
+          <li>Local Government service usually cannot be combined with service from another employer.</li>
+          <li>This tool is only a guide. Benefits Administration and the plan documents make the final decision.</li>
         </ul>
       </details>
     </section>
@@ -488,365 +510,212 @@
   <script>
     const form = document.getElementById('eligibilityForm');
     const resultArea = document.getElementById('resultArea');
-    const checklistArea = document.getElementById('checklistArea');
     const resetBtn = document.getElementById('resetBtn');
     const printBtn = document.getElementById('printBtn');
+    const agencyRuleBlock = document.getElementById('agencyRuleBlock');
+    const leRule = document.getElementById('leRule');
+    const lgRule = document.getElementById('lgRule');
 
-    const agencyParticipationBlock = document.getElementById('agencyParticipationBlock');
-    const leParticipation = document.getElementById('leParticipation');
-    const lgOptIn = document.getElementById('lgOptIn');
-    const tcrsQuestions = document.getElementById('tcrsQuestions');
-    const nonTcrsQuestions = document.getElementById('nonTcrsQuestions');
-
-    function getRadioValue(name) {
-      const selected = document.querySelector(`input[name="${name}"]:checked`);
-      return selected ? selected.value : '';
+    function radio(name) {
+      const item = document.querySelector(`input[name="${name}"]:checked`);
+      return item ? item.value : '';
     }
 
-    function getValue(id) {
-      return document.getElementById(id)?.value || '';
+    function value(id) {
+      return document.getElementById(id).value;
     }
 
-    function yesNoStatus(value, passText, failText, reviewText) {
-      if (value === 'yes') return { pass: true, status: 'pass', text: passText };
-      if (value === 'no') return { pass: false, status: 'fail', text: failText };
-      return { pass: null, status: 'review', text: reviewText };
+    function showAgencyRules() {
+      const agency = radio('agency');
+      const showLe = agency === 'le';
+      const showLg = agency === 'lg';
+      agencyRuleBlock.classList.toggle('hidden', !(showLe || showLg));
+      leRule.classList.toggle('hidden', !showLe);
+      lgRule.classList.toggle('hidden', !showLg);
     }
 
-    function setVisibility() {
-      const agency = getRadioValue('agency');
-      const system = getRadioValue('retirementSystem');
-
-      agencyParticipationBlock.classList.toggle('hidden', !(agency === 'le' || agency === 'lg'));
-      leParticipation.classList.toggle('hidden', agency !== 'le');
-      lgOptIn.classList.toggle('hidden', agency !== 'lg');
-
-      tcrsQuestions.classList.toggle('hidden', system !== 'tcrs');
-      nonTcrsQuestions.classList.toggle('hidden', system === 'tcrs' || system === '');
-    }
-
-    document.querySelectorAll('input[name="agency"], input[name="retirementSystem"]').forEach(el => {
-      el.addEventListener('change', setVisibility);
+    document.querySelectorAll('input[name="agency"]').forEach(input => {
+      input.addEventListener('change', showAgencyRules);
     });
 
-    function addCheck(checks, status, title, detail) {
-      checks.push({ status, title, detail });
+    function serviceMeetsMinimum(serviceGroup) {
+      return ['10to19', '20to24', '25to29', '30plus'].includes(serviceGroup);
     }
 
-    function getAgencyLabel(agency) {
-      return {
-        state: 'State',
-        hed: 'Higher Education',
-        le: 'Local Education',
-        lg: 'Local Government'
-      }[agency] || 'Selected agency';
+    function hasOneYearCoverage(coverageYears) {
+      return coverageYears === '1to2' || coverageYears === '3plus';
     }
 
-    function determineServiceRule({ agency, system, serviceYears, coverageYears, ageAtTermination, gapYears }) {
-      const isLg = agency === 'lg';
-      const isTcrs = system === 'tcrs';
+    function hasThreeYearsCoverage(coverageYears) {
+      return coverageYears === '3plus';
+    }
 
-      if (isLg && isTcrs) {
-        if (serviceYears >= 30) {
-          return {
-            pass: coverageYears >= 1,
-            status: coverageYears >= 1 ? 'pass' : 'fail',
-            title: 'Local Government TCRS: 30+ years service path',
-            detail: 'Requires at least 30 years with the retiring Local Government agency, at least 1 year of continuous insurance coverage, TCRS retirement timing and a TCRS pension check. Age 55 is not listed as a requirement for the 30+ years path.'
-          };
-        }
-        if (serviceYears >= 20) {
-          const pass = coverageYears >= 1 && ageAtTermination >= 55;
-          return {
-            pass,
-            status: pass ? 'pass' : 'fail',
-            title: 'Local Government TCRS: 20–29 years service path',
-            detail: 'Requires at least 20 years with the retiring Local Government agency, at least 1 year of continuous coverage, age 55 at termination, TCRS retirement timing and a TCRS pension check.'
-          };
-        }
-        if (serviceYears >= 10) {
-          const pass = coverageYears >= 3 && ageAtTermination >= 55;
-          return {
-            pass,
-            status: pass ? 'pass' : 'fail',
-            title: 'Local Government TCRS: 10–19 years service path',
-            detail: 'Requires at least 10 years with the retiring Local Government agency, at least 3 years of continuous coverage, age 55 at termination, TCRS retirement timing and a TCRS pension check.'
-          };
-        }
-        return {
-          pass: false,
-          status: 'fail',
-          title: 'Local Government TCRS: service below minimum',
-          detail: 'At least 10 years with the retiring Local Government agency is required.'
-        };
-      }
+    function serviceNumber(serviceGroup) {
+      const map = { less10: 0, '10to19': 10, '20to24': 20, '25to29': 25, '30plus': 30, unknown: null };
+      return map[serviceGroup];
+    }
 
-      if (isLg && !isTcrs) {
-        if (serviceYears >= 30) {
-          return {
-            pass: coverageYears >= 1,
-            status: coverageYears >= 1 ? 'pass' : 'fail',
-            title: 'Local Government Non-TCRS: 30+ years service path',
-            detail: 'Requires at least 30 years with the retiring Local Government agency, at least 1 year of continuous coverage and retirement insurance immediately following active coverage. A monthly annuity is not required.'
-          };
-        }
-        if (serviceYears >= 20) {
-          const pass = coverageYears >= 1 && ageAtTermination >= 55;
-          return {
-            pass,
-            status: pass ? 'pass' : 'fail',
-            title: 'Local Government Non-TCRS: 20–29 years service path',
-            detail: 'Requires at least 20 years with the retiring Local Government agency, at least 1 year of continuous coverage, age 55 at termination and immediate continuation of retiree insurance.'
-          };
-        }
-        if (serviceYears >= 10) {
-          const pass = coverageYears >= 3 && ageAtTermination >= 55;
-          return {
-            pass,
-            status: pass ? 'pass' : 'fail',
-            title: 'Local Government Non-TCRS: 10–19 years service path',
-            detail: 'Requires at least 10 years with the retiring Local Government agency, at least 3 years of continuous coverage, age 55 at termination and immediate continuation of retiree insurance.'
-          };
-        }
-        return {
-          pass: false,
-          status: 'fail',
-          title: 'Local Government Non-TCRS: service below minimum',
-          detail: 'At least 10 years with the retiring Local Government agency is required.'
-        };
-      }
-
-      if (!isLg && isTcrs) {
-        if (serviceYears >= 20) {
-          const pass = coverageYears >= 1 && gapYears <= 5;
-          return {
-            pass,
-            status: pass ? 'pass' : 'fail',
-            title: 'State/Higher Education/Local Education TCRS: 20+ years service path',
-            detail: 'Requires at least 20 years of creditable State, Higher Education or participating Local Education service, at least 1 year of continuous coverage, a TCRS pension check and no more than a 5-year gap between termination and TCRS retirement.'
-          };
-        }
-        if (serviceYears >= 10) {
-          const pass = coverageYears >= 3 && gapYears === 0;
-          return {
-            pass,
-            status: pass ? 'pass' : 'fail',
-            title: 'State/Higher Education/Local Education TCRS: 10–19 years service path',
-            detail: 'Requires at least 10 years of creditable service, at least 3 years of continuous coverage, TCRS retirement on or before active coverage ends and a TCRS pension check.'
-          };
-        }
-        return {
-          pass: false,
-          status: 'fail',
-          title: 'State/Higher Education/Local Education TCRS: service below minimum',
-          detail: 'At least 10 years of qualifying service is required.'
-        };
-      }
-
-      if (!isLg && !isTcrs) {
-        if (serviceYears >= 25) {
-          const pass = coverageYears >= 1 && gapYears <= 5;
-          return {
-            pass,
-            status: pass ? 'pass' : 'fail',
-            title: 'ORP / Non-TCRS: 25+ years service path',
-            detail: 'Requires at least 25 years of creditable State, Higher Education or participating Local Education service, at least 1 year of continuous coverage and no more than a 5-year gap before retiree insurance starts. A monthly annuity is not required.'
-          };
-        }
-        if (serviceYears >= 20) {
-          const pass = coverageYears >= 1 && gapYears <= 5;
-          return {
-            pass,
-            status: pass ? 'pass' : 'fail',
-            title: 'ORP / Non-TCRS: 20–24 years service path',
-            detail: 'Requires at least 20 years of creditable service, at least 1 year of continuous coverage and no more than a 5-year gap between termination and attaining age 55.'
-          };
-        }
-        if (serviceYears >= 10) {
-          const pass = coverageYears >= 3 && ageAtTermination >= 55 && gapYears === 0;
-          return {
-            pass,
-            status: pass ? 'pass' : 'fail',
-            title: 'ORP / Non-TCRS: 10–19 years service path',
-            detail: 'Requires at least 10 years of creditable service, age 55 at termination, at least 3 years of continuous coverage and immediate continuation of retiree group health insurance.'
-          };
-        }
-        return {
-          pass: false,
-          status: 'fail',
-          title: 'ORP / Non-TCRS: service below minimum',
-          detail: 'At least 10 years of qualifying service is required.'
-        };
-      }
+    function addFinding(list, status, title, detail) {
+      list.push({ status, title, detail });
     }
 
     function evaluate() {
-      const agency = getRadioValue('agency');
-      const system = getRadioValue('retirementSystem');
-      const hireBefore2015 = getValue('hireBefore2015');
-      const serviceYears = Number(getValue('serviceYears'));
-      const coverageYears = Number(getValue('coverageYears'));
-      const ageAtTermination = Number(getValue('ageAtTermination'));
-      const gapYears = Number(getValue('gapYears'));
-      const pensionCheck = getValue('pensionCheck');
-      const dorTiming = getValue('dorTiming');
-      const immediateCoverage = getValue('immediateCoverage');
-      const applicationTimely = getValue('applicationTimely');
-      const lePart = getValue('leParticipating');
-      const lgOpt = getValue('lgOptedIn');
+      const agency = radio('agency');
+      const retirementSystem = radio('retirementSystem');
+      const hireBefore2015 = value('hireBefore2015');
+      const serviceGroup = value('serviceGroup');
+      const coverageYears = value('coverageYears');
+      const age55 = value('age55');
+      const retirementTiming = value('retirementTiming');
+      const applicationTimely = value('applicationTimely');
+      const leParticipating = value('leParticipating');
+      const lgOptedIn = value('lgOptedIn');
 
-      const checks = [];
-      let hardFails = 0;
-      let reviewItems = 0;
+      const findings = [];
+      let fail = 0;
+      let maybe = 0;
 
-      function track(item) {
-        addCheck(checks, item.status, item.title, item.detail);
-        if (item.status === 'fail') hardFails++;
-        if (item.status === 'review') reviewItems++;
+      function record(status, title, detail) {
+        addFinding(findings, status, title, detail);
+        if (status === 'fail') fail++;
+        if (status === 'maybe') maybe++;
       }
 
-      track(yesNoStatus(
-        hireBefore2015,
-        'Hire date requirement appears met',
-        'Hire date requirement not met',
-        'Hire date needs review'
-      ));
+      if (hireBefore2015 === 'yes') record('pass', 'Hire date looks OK', 'The person was first hired before July 1, 2015.');
+      else if (hireBefore2015 === 'no') record('fail', 'Hire date does not look OK', 'People first hired on or after July 1, 2015 are generally not eligible.');
+      else record('maybe', 'Hire date needs review', 'The first qualifying hire date must be confirmed.');
 
       if (agency === 'le') {
-        track(yesNoStatus(
-          lePart,
-          'Local Education agency participation appears met',
-          'Local Education agency participation not met',
-          'Confirm Local Education agency participation'
-        ));
+        if (leParticipating === 'yes') record('pass', 'School system participation looks OK', 'The school system participated in the State Group Insurance Program.');
+        else if (leParticipating === 'no') record('fail', 'School system participation may not meet the rule', 'Local Education eligibility generally depends on agency participation.');
+        else record('maybe', 'School system participation needs review', 'Confirm whether the agency participated in the State Group Insurance Program.');
       }
 
       if (agency === 'lg') {
-        track(yesNoStatus(
-          lgOpt,
-          'Local Government opt-in appears met',
-          'Local Government opt-in not met',
-          'Confirm Local Government opt-in status'
-        ));
+        if (lgOptedIn === 'yes') record('pass', 'Local Government opt-in looks OK', 'The agency offers retiree health coverage.');
+        else if (lgOptedIn === 'no') record('fail', 'Local Government opt-in does not look OK', 'The local government must choose to offer retiree health coverage.');
+        else record('maybe', 'Local Government opt-in needs review', 'Confirm whether the agency opted in to offer retiree health coverage.');
       }
 
-      const serviceRule = determineServiceRule({ agency, system, serviceYears, coverageYears, ageAtTermination, gapYears });
-      track(serviceRule);
-
-      if (system === 'tcrs') {
-        track(yesNoStatus(
-          pensionCheck,
-          'TCRS pension check requirement appears met',
-          'TCRS pension check requirement not met',
-          'Confirm TCRS pension check status'
-        ));
-        track(yesNoStatus(
-          dorTiming,
-          'TCRS date of retirement timing appears met',
-          'TCRS date of retirement timing not met',
-          'Confirm TCRS date of retirement timing'
-        ));
+      if (retirementSystem === 'unknown') {
+        record('maybe', 'Retirement plan needs review', 'Confirm whether this is TCRS, ORP or another Non-TCRS retirement plan.');
       } else {
-        track(yesNoStatus(
-          immediateCoverage,
-          'Immediate continuation / allowed gap rule appears met',
-          'Immediate continuation / allowed gap rule not met',
-          'Confirm immediate continuation or allowed gap rule'
-        ));
+        record('pass', 'Retirement plan selected', retirementSystem === 'tcrs' ? 'TCRS rules will be used.' : 'ORP / Non-TCRS rules will be used.');
       }
 
-      track(yesNoStatus(
-        applicationTimely,
-        'Application timing appears met',
-        'Application timing not met',
-        'Application timing needs review'
-      ));
-
-      const agencyLabel = getAgencyLabel(agency);
-      let resultClass = 'eligible';
-      let resultTitle = 'Appears eligible for retiree group health review';
-      let resultText = `Based on the answers provided, this ${agencyLabel} retiree appears to meet the major screening requirements for retiree group health eligibility. Final eligibility should still be confirmed by Benefits Administration and the governing plan documents.`;
-
-      if (hardFails > 0) {
-        resultClass = 'not-eligible';
-        resultTitle = 'Does not appear eligible based on these answers';
-        resultText = 'One or more required eligibility conditions appears not to be met. Review the failed items below before submitting or approving coverage.';
-      } else if (reviewItems > 0) {
-        resultClass = 'review';
-        resultTitle = 'Needs review before eligibility can be determined';
-        resultText = 'No clear failure was identified, but one or more answers is unknown or requires confirmation.';
+      if (serviceGroup === 'unknown') {
+        record('maybe', 'Years of service need review', 'The years of service must be confirmed.');
+      } else if (!serviceMeetsMinimum(serviceGroup)) {
+        record('fail', 'Not enough service', 'At least 10 years of qualifying service is usually required.');
+      } else {
+        record('pass', 'Minimum service looks OK', 'The person appears to have at least 10 years of qualifying service.');
       }
 
-      const requiredDocs = buildDocumentationList(agency, system);
-      renderResult(resultClass, resultTitle, resultText, checks, requiredDocs);
+      if (coverageYears === 'unknown') {
+        record('maybe', 'Insurance history needs review', 'Confirm how long the person was enrolled right before the job ended.');
+      } else {
+        const years = serviceNumber(serviceGroup);
+        let needsThreeYears = false;
+        if (agency === 'lg') {
+          needsThreeYears = years !== null && years < 20;
+        } else if (retirementSystem === 'tcrs') {
+          needsThreeYears = years !== null && years < 20;
+        } else {
+          needsThreeYears = years !== null && years < 20;
+        }
+
+        if (needsThreeYears) {
+          if (hasThreeYearsCoverage(coverageYears)) record('pass', 'Insurance coverage length looks OK', 'This path usually requires 3 years of continuous coverage.');
+          else record('fail', 'Not enough insurance coverage history', 'This path usually requires 3 years of continuous coverage right before the job ended.');
+        } else {
+          if (hasOneYearCoverage(coverageYears)) record('pass', 'Insurance coverage length looks OK', 'This path usually requires at least 1 year of continuous coverage.');
+          else record('fail', 'Not enough insurance coverage history', 'This path usually requires at least 1 year of continuous coverage right before the job ended.');
+        }
+      }
+
+      const years = serviceNumber(serviceGroup);
+      const ageRuleNeeded =
+        retirementSystem === 'nonTcrs' && years !== null && years < 25 ||
+        agency === 'lg' && years !== null && years < 30;
+
+      if (age55 === 'unknown') {
+        record('maybe', 'Age needs review', 'Confirm whether the person was at least 55 when employment ended.');
+      } else if (ageRuleNeeded && age55 !== 'yes') {
+        record('fail', 'Age rule may not be met', 'This path usually requires the person to be at least 55 when employment ended.');
+      } else if (ageRuleNeeded && age55 === 'yes') {
+        record('pass', 'Age rule looks OK', 'This path usually requires age 55 at termination.');
+      } else {
+        record('pass', 'Age does not appear to block this path', 'Based on the answers, age 55 does not appear to be the main deciding factor.');
+      }
+
+      if (retirementTiming === 'yes') record('pass', 'Retirement timing looks OK', 'The retirement or retiree insurance timing appears to meet the rule.');
+      else if (retirementTiming === 'no') record('fail', 'Retirement timing does not look OK', 'The retirement date or insurance start date may be too late.');
+      else record('maybe', 'Retirement timing needs review', 'Confirm whether the retirement date or insurance start date met the deadline.');
+
+      if (applicationTimely === 'yes') record('pass', 'Application timing looks OK', 'The retirement insurance application appears to have been sent on time.');
+      else if (applicationTimely === 'no') record('fail', 'Application was not sent on time', 'A late application can prevent coverage.');
+      else record('maybe', 'Application timing needs review', 'Confirm when the application was received.');
+
+      renderResult(fail, maybe, findings);
     }
 
-    function buildDocumentationList(agency, system) {
-      const docs = [
-        'Application to Continue Insurance at Retirement',
-        'Proof or system verification of qualifying hire date before July 1, 2015',
-        'Creditable service verification',
-        'Continuous insurance coverage verification immediately before termination'
-      ];
+    function renderResult(fail, maybe, findings) {
+      let className = 'eligible';
+      let title = 'Likely eligible — send for final review';
+      let text = 'Based on these answers, the person appears to meet the main rules. Benefits Administration should still make the final decision.';
 
-      if (system === 'tcrs') {
-        docs.push('TCRS notice/date of retirement verification');
-        docs.push('Verification that the retiree is receiving a TCRS pension check based on their own service');
-      } else {
-        docs.push('ORP / Non-TCRS service and retirement eligibility verification');
-        docs.push('Documentation showing immediate continuation or applicable allowed gap');
+      if (fail > 0) {
+        className = 'not-eligible';
+        title = 'Likely not eligible based on these answers';
+        text = 'One or more required rules may not be met. Review the items below before moving forward.';
+      } else if (maybe > 0) {
+        className = 'review';
+        title = 'Needs review';
+        text = 'No clear “no” answer was found, but some information is missing or uncertain.';
       }
 
-      if (agency === 'le') docs.push('Local Education agency participation confirmation, if not already verified');
-      if (agency === 'lg') docs.push('Local Government written opt-in confirmation for retiree group health coverage');
-
-      return docs;
-    }
-
-    function renderResult(resultClass, title, text, checks, docs) {
-      const iconMap = {
-        pass: 'dot-pass',
-        fail: 'dot-fail',
-        review: 'dot-review'
-      };
+      const dot = { pass: 'pass', fail: 'fail', maybe: 'maybe' };
+      const label = { pass: 'Looks OK', fail: 'Problem', maybe: 'Review' };
 
       resultArea.innerHTML = `
-        <div class="result-box ${resultClass}" role="status" aria-live="polite">
+        <div class="result-box ${className}" role="status" aria-live="polite">
           <h3>${title}</h3>
           <p>${text}</p>
         </div>
-        <h3>Decision checklist</h3>
-        <div class="checklist">
-          ${checks.map(check => `
-            <div class="check-item">
-              <strong><span class="status-dot ${iconMap[check.status] || ''}"></span>${check.title}</strong>
-              <span class="small">${check.detail || check.text}</span>
+
+        <h3>What the tool found</h3>
+        <div class="status-list">
+          ${findings.map(item => `
+            <div class="status-item">
+              <strong><span class="dot ${dot[item.status]}"></span>${label[item.status]}: ${item.title}</strong>
+              <span class="small">${item.detail}</span>
             </div>
           `).join('')}
         </div>
-        <h3 style="margin-top: 1.25rem;">Likely documentation / verification items</h3>
-        <ul>
-          ${docs.map(doc => `<li>${doc}</li>`).join('')}
-        </ul>
-        <p class="small"><strong>Important:</strong> This tool is for screening and training support. Formal plan documents, agency records and Benefits Administration determinations control final eligibility.</p>
+
+        <div class="notice">
+          <strong>Next step:</strong> Confirm the result with the person’s agency records, retirement records and the official plan rules.
+        </div>
       `;
+
+      document.getElementById('result-title').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
       evaluate();
     });
 
     resetBtn.addEventListener('click', function() {
       form.reset();
-      setVisibility();
+      showAgencyRules();
       resultArea.innerHTML = `
         <div class="result-box neutral">
-          <h3>Complete the questions to see a result.</h3>
-          <p>The decision tree will show whether the person appears eligible, not eligible, or needs Benefits Administration review.</p>
+          <h3>Answer the questions above.</h3>
+          <p>Your result will show here.</p>
         </div>
-        <div class="checklist" id="checklistArea"></div>
       `;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     printBtn.addEventListener('click', function() {
