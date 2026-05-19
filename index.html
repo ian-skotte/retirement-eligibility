@@ -108,19 +108,6 @@
       background: #ffffff;
     }
 
-    .step-number {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 2rem;
-      height: 2rem;
-      border-radius: 50%;
-      background: var(--primary);
-      color: #fff;
-      font-weight: 700;
-      margin-right: .4rem;
-    }
-
     fieldset {
       border: 0;
       padding: 0;
@@ -315,6 +302,7 @@
           <li>You may need help from your agency benefits coordinator.</li>
           <li>You should have your retirement date, years of service and insurance coverage history nearby.</li>
           <li>Rules can be different for State, Higher Education, Local Education and Local Government employees.</li>
+          <li>If you are age 65 or older, ask about The Tennessee Plan instead of regular retiree group health.</li>
         </ul>
         <div class="notice"><strong>Plain-language tip:</strong> “Continuous coverage” means you were enrolled in insurance right before your job ended.</div>
       </div>
@@ -328,7 +316,7 @@
         <form id="eligibilityForm">
           <div class="step">
             <fieldset>
-              <legend><span class="step-number">1</span>Who did you work for?</legend>
+              <legend>Who did you work for?</legend>
               <div class="choice-grid">
                 <label class="choice-option"><input type="radio" name="agency" value="state" required /> <span><strong>State</strong> State agency employee</span></label>
                 <label class="choice-option"><input type="radio" name="agency" value="hed" /> <span><strong>Higher Education</strong> College, university or higher education employee</span></label>
@@ -340,7 +328,7 @@
 
           <div class="step hidden" id="agencyRuleBlock">
             <div id="leRule" class="hidden">
-              <label class="question-label" for="leParticipating"><span class="step-number">2</span>Was your school system in the State Group Insurance Program?</label>
+              <label class="question-label" for="leParticipating">Was your school system in the State Group Insurance Program?</label>
               <p class="hint">Choose “Not sure” if you do not know.</p>
               <select id="leParticipating" name="leParticipating">
                 <option value="">Select one</option>
@@ -350,7 +338,7 @@
               </select>
             </div>
             <div id="lgRule" class="hidden">
-              <label class="question-label" for="lgOptedIn"><span class="step-number">2</span>Does your local government offer retiree health coverage?</label>
+              <label class="question-label" for="lgOptedIn">Does your local government offer retiree health coverage?</label>
               <p class="hint">Local governments must choose to offer this coverage. Choose “Not sure” if you do not know.</p>
               <select id="lgOptedIn" name="lgOptedIn">
                 <option value="">Select one</option>
@@ -363,7 +351,7 @@
 
           <div class="step">
             <fieldset>
-              <legend><span class="step-number">3</span>Which retirement plan applies?</legend>
+              <legend>Which retirement plan applies?</legend>
               <div class="choice-grid">
                 <label class="choice-option"><input type="radio" name="retirementSystem" value="tcrs" required /> <span><strong>TCRS</strong> I receive or will receive a TCRS pension check.</span></label>
                 <label class="choice-option"><input type="radio" name="retirementSystem" value="nonTcrs" /> <span><strong>ORP / Non-TCRS</strong> I am not retiring through TCRS.</span></label>
@@ -373,7 +361,8 @@
           </div>
 
           <div class="step">
-            <label class="question-label" for="hireBefore2015"><span class="step-number">4</span>Were you first hired before July 1, 2015?</label>
+            <label class="question-label" for="hireBefore2015">Were you first hired before July 1, 2015?</label>
+            <p class="hint">This date matters for State, Higher Education and Local Education retirees. It does not block Local Government retiree health coverage.</p>
             <select id="hireBefore2015" name="hireBefore2015" required>
               <option value="">Select one</option>
               <option value="yes">Yes</option>
@@ -384,7 +373,7 @@
 
           <div class="step">
             <fieldset>
-              <legend><span class="step-number">5</span>How many years of service do you have?</legend>
+              <legend>How many years of service do you have?</legend>
               <p class="hint">Round down if you are not sure. For example, use 14 if you have 14 years and 8 months.</p>
               <select id="serviceGroup" name="serviceGroup" required>
                 <option value="">Select one</option>
@@ -399,7 +388,7 @@
           </div>
 
           <div class="step">
-            <label class="question-label" for="coverageYears"><span class="step-number">6</span>How long were you enrolled in insurance right before your job ended?</label>
+            <label class="question-label" for="coverageYears">How long were you enrolled in insurance right before your job ended?</label>
             <select id="coverageYears" name="coverageYears" required>
               <option value="">Select one</option>
               <option value="less1">Less than 1 year</option>
@@ -410,7 +399,7 @@
           </div>
 
           <div class="step">
-            <label class="question-label" for="age55"><span class="step-number">7</span>Were you at least age 55 when your job ended?</label>
+            <label class="question-label" for="age55">Were you at least age 55 when your job ended?</label>
             <select id="age55" name="age55" required>
               <option value="">Select one</option>
               <option value="yes">Yes</option>
@@ -421,7 +410,7 @@
           </div>
 
           <div class="step">
-            <label class="question-label" for="retirementTiming"><span class="step-number">8</span>Did your retirement or retiree insurance start on time?</label>
+            <label class="question-label" for="retirementTiming">Did your retirement or retiree insurance start on time?</label>
             <p class="hint">For many people, coverage must start right away. Some people with more service may have up to a 5-year gap.</p>
             <select id="retirementTiming" name="retirementTiming" required>
               <option value="">Select one</option>
@@ -432,7 +421,18 @@
           </div>
 
           <div class="step">
-            <label class="question-label" for="applicationTimely"><span class="step-number">9</span>Was the retirement insurance application sent on time?</label>
+            <label class="question-label" for="medicareAge">Are you already eligible for Medicare because of your age?</label>
+            <p class="hint">This usually means age 65 or older. If yes, retiree group health may not be the right coverage. You may need to ask about The Tennessee Plan instead.</p>
+            <select id="medicareAge" name="medicareAge" required>
+              <option value="">Select one</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+              <option value="unknown">Not sure</option>
+            </select>
+          </div>
+
+          <div class="step">
+            <label class="question-label" for="applicationTimely">Was the retirement insurance application sent on time?</label>
             <p class="hint">Usually, this means within one full calendar month after active coverage ended or after retirement conditions were met.</p>
             <select id="applicationTimely" name="applicationTimely" required>
               <option value="">Select one</option>
@@ -498,10 +498,12 @@
       <details>
         <summary>Important reminders</summary>
         <ul class="plain-list">
-          <li>People hired on or after July 1, 2015 are generally not eligible to continue retiree group health coverage.</li>
+          <li>For State, Higher Education and Local Education, people hired on or after July 1, 2015 are generally not eligible to continue retiree group health coverage.</li>
+          <li>For Local Government, retiree health coverage may be available even if the person was hired on or after July 1, 2015.</li>
           <li>Local Government agencies must choose, in writing, to offer retiree health coverage.</li>
           <li>Local Government service usually cannot be combined with service from another employer.</li>
           <li>This tool is only a guide. Benefits Administration and the plan documents make the final decision.</li>
+          <li>Retirees who are Medicare-eligible because of age are generally no longer eligible for regular retiree group health.</li>
         </ul>
       </details>
     </section>
@@ -567,6 +569,7 @@
       const coverageYears = value('coverageYears');
       const age55 = value('age55');
       const retirementTiming = value('retirementTiming');
+      const medicareAge = value('medicareAge');
       const applicationTimely = value('applicationTimely');
       const leParticipating = value('leParticipating');
       const lgOptedIn = value('lgOptedIn');
@@ -581,9 +584,15 @@
         if (status === 'maybe') maybe++;
       }
 
-      if (hireBefore2015 === 'yes') record('pass', 'Hire date looks OK', 'The person was first hired before July 1, 2015.');
-      else if (hireBefore2015 === 'no') record('fail', 'Hire date does not look OK', 'People first hired on or after July 1, 2015 are generally not eligible.');
-      else record('maybe', 'Hire date needs review', 'The first qualifying hire date must be confirmed.');
+      if (agency === 'lg') {
+        record('pass', 'Hire date does not block Local Government retiree health coverage', 'For Local Government agency employees, retiree health coverage may be available even if the person was hired on or after July 1, 2015.');
+      } else if (hireBefore2015 === 'yes') {
+        record('pass', 'Hire date looks OK', 'The person was first hired before July 1, 2015.');
+      } else if (hireBefore2015 === 'no') {
+        record('fail', 'Hire date does not look OK', 'For State, Higher Education and Local Education employees, people first hired on or after July 1, 2015 are generally not eligible for retiree group health.');
+      } else {
+        record('maybe', 'Hire date needs review', 'For State, Higher Education and Local Education employees, the first qualifying hire date must be confirmed.');
+      }
 
       if (agency === 'le') {
         if (leParticipating === 'yes') record('pass', 'School system participation looks OK', 'The school system participated in the State Group Insurance Program.');
@@ -651,6 +660,14 @@
       if (retirementTiming === 'yes') record('pass', 'Retirement timing looks OK', 'The retirement or retiree insurance timing appears to meet the rule.');
       else if (retirementTiming === 'no') record('fail', 'Retirement timing does not look OK', 'The retirement date or insurance start date may be too late.');
       else record('maybe', 'Retirement timing needs review', 'Confirm whether the retirement date or insurance start date met the deadline.');
+
+      if (medicareAge === 'yes') {
+        record('fail', 'Medicare age rule needs attention', 'People who are eligible for Medicare because of age are generally not eligible for retiree group health. Ask about The Tennessee Plan instead.');
+      } else if (medicareAge === 'no') {
+        record('pass', 'Medicare age rule looks OK', 'The person is not yet Medicare-eligible because of age.');
+      } else {
+        record('maybe', 'Medicare age status needs review', 'Confirm whether the person is Medicare-eligible because of age.');
+      }
 
       if (applicationTimely === 'yes') record('pass', 'Application timing looks OK', 'The retirement insurance application appears to have been sent on time.');
       else if (applicationTimely === 'no') record('fail', 'Application was not sent on time', 'A late application can prevent coverage.');
