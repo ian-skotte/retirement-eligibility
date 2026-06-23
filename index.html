@@ -170,15 +170,8 @@
     .choice-option strong { display: block; }
     .choice-option span { color: var(--muted); font-size: .95rem; }
 
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: .9rem;
-    }
-
     @media (max-width: 700px) {
       body { font-size: 17px; }
-      .two-col { grid-template-columns: 1fr; }
       .wrap { width: min(100% - 1rem, 980px); }
       header { padding: 1.5rem .5rem; }
       .card-body, .card-header { padding: 1rem; }
@@ -502,8 +495,10 @@
           <li>For Local Government, retiree health coverage may be available even if the person was hired on or after July 1, 2015.</li>
           <li>Local Government agencies must choose, in writing, to offer retiree health coverage.</li>
           <li>Local Government service usually cannot be combined with service from another employer.</li>
-          <li>This tool is only a guide. Benefits Administration and the plan documents make the final decision.</li>
+          <li>Local Government Non-TCRS eligibility should be confirmed by Benefits Administration before a final answer is given.</li>
+          <li>Local Education employees with less than 20 years of service should be manually reviewed before a final answer is given.</li>
           <li>Retirees who are Medicare-eligible because of age are generally no longer eligible for regular retiree group health.</li>
+          <li>This tool is only a guide. Benefits Administration and the plan documents make the final decision.</li>
         </ul>
       </details>
     </section>
@@ -584,6 +579,8 @@
         if (status === 'maybe') maybe++;
       }
 
+      const years = serviceNumber(serviceGroup);
+
       if (agency === 'lg') {
         record('pass', 'Hire date does not block Local Government retiree health coverage', 'For Local Government agency employees, retiree health coverage may be available even if the person was hired on or after July 1, 2015.');
       } else if (hireBefore2015 === 'yes') {
@@ -612,6 +609,17 @@
         record('pass', 'Retirement plan selected', retirementSystem === 'tcrs' ? 'TCRS rules will be used.' : 'ORP / Non-TCRS rules will be used.');
       }
 
+      // ORP is grouped with Non-TCRS in this simple public-facing tool because the main screening
+      // rule still depends on the same broad service/coverage/age questions. Higher Education ORP
+      // is distinct from Local Government Non-TCRS, so LG + Non-TCRS is flagged for human review below.
+      if (agency === 'lg' && retirementSystem === 'nonTcrs') {
+        record('maybe', 'Local Government Non-TCRS needs manual review', 'This path can be different from Local Government TCRS. Confirm the rule with Benefits Administration before giving a final answer.');
+      }
+
+      if (agency === 'le' && years !== null && years < 20 && serviceGroup !== 'less10') {
+        record('maybe', 'Local Education under 20 years needs manual review', 'The 10–19 year Local Education path should be confirmed before giving a final answer.');
+      }
+
       if (serviceGroup === 'unknown') {
         record('maybe', 'Years of service need review', 'The years of service must be confirmed.');
       } else if (!serviceMeetsMinimum(serviceGroup)) {
@@ -623,15 +631,9 @@
       if (coverageYears === 'unknown') {
         record('maybe', 'Insurance history needs review', 'Confirm how long the person was enrolled right before the job ended.');
       } else {
-        const years = serviceNumber(serviceGroup);
-        let needsThreeYears = false;
-        if (agency === 'lg') {
-          needsThreeYears = years !== null && years < 20;
-        } else if (retirementSystem === 'tcrs') {
-          needsThreeYears = years !== null && years < 20;
-        } else {
-          needsThreeYears = years !== null && years < 20;
-        }
+        // The less-than-20-years threshold for 3 years of continuous coverage is the same across
+        // the main State, Higher Education, Local Education and Local Government screening paths.
+        const needsThreeYears = years !== null && years < 20;
 
         if (needsThreeYears) {
           if (hasThreeYearsCoverage(coverageYears)) record('pass', 'Insurance coverage length looks OK', 'This path usually requires 3 years of continuous coverage.');
@@ -642,10 +644,11 @@
         }
       }
 
-      const years = serviceNumber(serviceGroup);
       const ageRuleNeeded =
-        retirementSystem === 'nonTcrs' && years !== null && years < 25 ||
-        agency === 'lg' && years !== null && years < 30;
+        (retirementSystem === 'tcrs' && agency !== 'lg' && years !== null && years < 25) ||
+        (retirementSystem === 'nonTcrs' && agency !== 'lg' && years !== null && years < 25) ||
+        (agency === 'lg' && retirementSystem === 'tcrs' && years !== null && years < 30) ||
+        (agency === 'lg' && retirementSystem === 'nonTcrs');
 
       if (age55 === 'unknown') {
         record('maybe', 'Age needs review', 'Confirm whether the person was at least 55 when employment ended.');
@@ -688,7 +691,7 @@
       } else if (maybe > 0) {
         className = 'review';
         title = 'Needs review';
-        text = 'No clear “no” answer was found, but some information is missing or uncertain.';
+        text = 'No clear “no” answer was found, but some information is missing, uncertain or needs manual review.';
       }
 
       const dot = { pass: 'pass', fail: 'fail', maybe: 'maybe' };
